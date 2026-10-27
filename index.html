@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Guia de Estudos: Entrada na Área de Dados</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#FBFCF8; --grid:#DCE6EF; --ink:#1B2F6B; --text:#22252B; --muted:#5E6673;
+  --marker:#F6DE4A; --marker-text:#22252B; --line:#C9D3DE; --done:#8A919C; --surface:#FFFFFF;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --paper:#0E1A2E; --grid:#1A2B47; --ink:#8FB8FF; --text:#E6ECF5; --muted:#9AA8BD;
+    --marker:#E2C93A; --marker-text:#141A24; --line:#2A3C5C; --done:#6E7B90; --surface:#13223B;
+    color-scheme: dark;
+  }
+}
+*{box-sizing:border-box}
+body{
+  margin:0; color:var(--text); background-color:var(--paper);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:24px 24px;
+  font:17px/1.6 "Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+main{max-width:760px;margin:0 auto;padding:48px 20px 80px}
+h1,h2,h3{font-family:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;color:var(--ink);line-height:1.15}
+h1{font-size:clamp(2rem,6vw,3.1rem);font-weight:800;margin:0 0 12px;letter-spacing:-.02em}
+h2{font-size:1.55rem;font-weight:800;margin:0}
+h3{font-size:1.08rem;font-weight:500;margin:22px 0 8px}
+p{margin:0 0 12px;max-width:68ch}
+.lead{color:var(--muted)}
+.meter{margin:28px 0 8px;height:22px;background:var(--surface);border:2px solid var(--ink);border-radius:4px;overflow:hidden}
+.meter span{display:block;height:100%;width:0;background:var(--marker);transition:width .4s ease}
+.meter-label{font-weight:700;color:var(--ink)}
+.phase{background:var(--surface);border:2px solid var(--ink);border-radius:6px;margin-top:28px;padding:0}
+.phase summary{list-style:none;cursor:pointer;padding:18px 20px;display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
+.phase summary::-webkit-details-marker{display:none}
+.phase summary:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid var(--marker);outline-offset:2px}
+.phase .count{color:var(--muted);font-size:.95rem;white-space:nowrap}
+.phase .body{padding:0 20px 20px;border-top:1px dashed var(--line)}
+.phase .body > p:first-child{margin-top:16px}
+ul.tasks{list-style:none;margin:0;padding:0}
+ul.tasks li{border-bottom:1px solid var(--line)}
+ul.tasks label{display:flex;gap:12px;align-items:flex-start;padding:9px 0;cursor:pointer}
+ul.tasks input{width:20px;height:20px;margin-top:3px;flex:none;accent-color:var(--ink)}
+ul.tasks input:checked + span{color:var(--done);text-decoration:line-through}
+.paths{display:flex;gap:8px;margin:16px 0 4px;flex-wrap:wrap}
+.paths button{font:inherit;font-weight:700;padding:8px 14px;border:2px solid var(--ink);border-radius:4px;background:transparent;color:var(--ink);cursor:pointer}
+.paths button[aria-pressed="true"]{background:var(--marker);color:var(--marker-text);border-color:var(--marker)}
+.wrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.95rem;margin:8px 0 12px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--ink);font-family:"Bricolage Grotesque",system-ui,sans-serif;font-weight:500}
+a{color:var(--ink)}
+ol{padding-left:22px;margin:0}
+ol li{margin-bottom:6px}
+.tools{margin-top:40px;display:flex;gap:10px;flex-wrap:wrap}
+.tools button{font:inherit;padding:8px 14px;border-radius:4px;border:2px solid var(--line);background:var(--surface);color:var(--text);cursor:pointer}
+.routine input{font:inherit;color:inherit;background:transparent;border:1px solid transparent;border-radius:4px;padding:4px 6px;width:100%;min-width:64px}
+.routine input:hover{border-color:var(--line)}
+.routine input:focus{border-color:var(--ink);background:var(--paper)}
+.routine td:last-child{width:1%;padding-left:0}
+.routine .del{font:inherit;line-height:1;padding:4px 9px;border:1px solid var(--line);border-radius:4px;background:transparent;color:var(--muted);cursor:pointer}
+.routine .del:hover{color:var(--ink);border-color:var(--ink)}
+.routine-tools{display:flex;gap:10px;flex-wrap:wrap;margin:4px 0 8px}
+.routine-tools button{font:inherit;padding:6px 12px;border-radius:4px;border:2px solid var(--line);background:var(--surface);color:var(--text);cursor:pointer}
+.hint{color:var(--muted);font-size:.9rem}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+@media (prefers-reduced-motion:reduce){.meter span{transition:none}}
+</style>
+</head>
+<body>
+<main>
+  <h1>Guia de estudos: entrada na área de dados</h1>
+  <p class="lead">Meta: estágio ou vaga júnior em dados em cerca de 6 meses ou mais. Estudo nos tempos livres, por volta de 11 a 12 horas por semana. Marque cada tarefa ao concluir; o progresso fica salvo neste navegador.</p>
+  <div class="meter" role="progressbar" aria-label="Progresso geral" aria-valuemin="0" aria-valuemax="100"><span id="bar"></span></div>
+  <p class="meter-label" id="barLabel">0% concluído</p>
+
+  <div id="phases"></div>
+
+  <details class="phase">
+    <summary><h2>Quais roadmaps usar</h2></summary>
+    <div class="body">
+      <p>Principal: <strong>Data Analyst</strong>. Para tapar lacunas: <strong>SQL</strong> e <strong>Python</strong>, na seção “Skill-based” do roadmap.sh.</p>
+      <div class="wrap"><table>
+        <tr><th>Roadmap</th><th>Quando</th><th>Como usar</th></tr>
+        <tr><td>SQL</td><td>Fase 1</td><td>Do básico até window functions e CTEs. Ignore administração de banco.</td></tr>
+        <tr><td>Python</td><td>Fases 1 e 2</td><td>Só o básico e estruturas de dados. Ignore web, async e empacotamento.</td></tr>
+        <tr><td>Data Analyst</td><td>Fases 2 e 3</td><td>Checklist de lacunas, não lista a zerar.</td></tr>
+        <tr><td>BI Analyst</td><td>Fase 3A</td><td>Power BI, modelagem e indicadores.</td></tr>
+        <tr><td>Data Engineer</td><td>Fase 3B</td><td>Modelagem, pipelines, uma cloud, Airflow. Streaming fica para depois.</td></tr>
+        <tr><td>AI/Data Scientist e ML</td><td>Depois do primeiro emprego</td><td>Estudar o que for precisando.</td></tr>
+      </table></div>
+      <p>Marque como feito no roadmap só o que você já aplicou num exercício ou projeto.</p>
+    </div>
+  </details>
+
+  <details class="phase">
+    <summary><h2>Rotina semanal</h2></summary>
+    <div class="body">
+      <p>Estudo de dados nas tardes, depois do estágio (7h–13h) e antes da faculdade. Nada de estudar depois das 23h.</p>
+      <div class="wrap"><table class="routine">
+        <thead><tr><th>Dia</th><th>Horário</th><th>Foco</th><th>Dados</th><th><span class="sr">Remover</span></th></tr></thead>
+        <tbody id="routineBody"></tbody>
+      </table></div>
+      <div class="routine-tools">
+        <button type="button" id="addRow">+ Adicionar linha</button>
+        <button type="button" id="resetRoutine">Restaurar rotina padrão</button>
+      </div>
+      <p class="hint">Clique em qualquer campo para editar. As mudanças ficam salvas neste navegador.</p>
+      <p>Em semana cheia, a faculdade/trabalho tem prioridade: faça só 30 minutos de SQL para manter o hábito.</p>
+      <h3>Regras</h3>
+      <ol>
+        <li>Para cada hora de vídeo, pelo menos duas de exercício ou projeto.</li>
+        <li>Travou mais de 30 minutos? Veja a solução, entenda e refaça do zero no dia seguinte.</li>
+        <li>Um curso por tema. Não troque no meio.</li>
+        <li>Use IA para tirar dúvidas e revisar código, não para escrever por você.</li>
+        <li>No fim de cada fase, revise este guia.</li>
+      </ol>
+    </div>
+  </details>
+
+  <details class="phase">
+    <summary><h2>Recursos</h2></summary>
+    <div class="body">
+      <div class="wrap"><table>
+        <tr><th>Recurso</th><th>Tema</th><th>Fase</th></tr>
+        <tr><td><a href="https://roadmap.sh" target="_blank" rel="noopener">roadmap.sh</a></td><td>Mapa de tópicos</td><td>Todas</td></tr>
+        <tr><td><a href="https://sqlbolt.com" target="_blank" rel="noopener">SQLBolt</a></td><td>SQL interativo, do zero</td><td>1</td></tr>
+        <tr><td><a href="https://www.hackerrank.com/domains/sql" target="_blank" rel="noopener">HackerRank SQL</a></td><td>Exercícios por nível</td><td>1 e 2</td></tr>
+        <tr><td>Curso em Vídeo (YouTube)</td><td>Python básico em português</td><td>1</td></tr>
+        <tr><td><a href="https://www.kaggle.com/learn" target="_blank" rel="noopener">Kaggle Learn</a></td><td>pandas, visualização, SQL</td><td>2</td></tr>
+        <tr><td>StatQuest (YouTube)</td><td>Estatística intuitiva</td><td>2</td></tr>
+        <tr><td><a href="https://www.ibge.gov.br" target="_blank" rel="noopener">IBGE</a> e <a href="https://dados.gov.br" target="_blank" rel="noopener">dados.gov.br</a></td><td>Dados públicos para projetos</td><td>2 e 3</td></tr>
+        <tr><td>Microsoft Learn</td><td>Power BI e DAX</td><td>3A</td></tr>
+        <tr><td><a href="https://github.com/DataTalksClub/data-engineering-zoomcamp" target="_blank" rel="noopener">Data Engineering Zoomcamp</a></td><td>Docker, cloud, orquestração, dbt</td><td>3B</td></tr>
+      </table></div>
+    </div>
+  </details>
+
+  <div class="tools">
+    <button id="exportBtn" type="button">Copiar backup</button>
+    <button id="importBtn" type="button">Restaurar backup</button>
+    <button id="resetBtn">Apagar progresso</button>
+  </div>
+</main>
+
+<script>
+const PHASES = [
+  {id:"f1", title:"Fase 1: Fundamentos", when:"Semanas 1 a 6",
+   intro:"Meta: dominar o básico de Excel, resolver SQL intermediário sem consultar resposta e escrever scripts simples em Python sozinho.",
+   groups:[
+    {name:"Excel básico", items:["Formatar dados como tabela, filtros e classificação","Fórmulas essenciais: SOMA, MÉDIA, CONT.SE, SOMASE, SE","PROCV e PROCX para cruzar duas tabelas","Tabela dinâmica: agrupar, somar e filtrar","Gráficos simples a partir de uma tabela dinâmica","Exercício: refazer no Excel uma consulta de GROUP BY que você já fez em SQL"]},
+    {name:"SQL", items:["Semana 1: SELECT, WHERE, ORDER BY, LIMIT, operadores lógicos","Semana 2: funções de agregação, GROUP BY, HAVING","Semana 3: JOINs (INNER, LEFT, RIGHT, FULL) e quando cada um muda o resultado","Semana 4: subqueries e CTEs (WITH)","Semanas 5 e 6: window functions (ROW_NUMBER, RANK, LAG, SUM OVER) e CASE WHEN","Instalar PostgreSQL localmente e praticar com um banco de exemplo"]},
+    {name:"Python", items:["Revisar variáveis, tipos, condicionais e laços","Listas, dicionários, tuplas e sets: quando usar cada um","Funções, parâmetros e retorno","Ler e escrever CSV e JSON com a biblioteca padrão","Tratamento de erros com try/except","Escrever 10 scripts pequenos do zero"]},
+   ], outro:"Para avançar: resolver a maioria dos desafios “medium” de SQL no HackerRank sem ajuda."},
+  {id:"f2", title:"Fase 2: Dados de verdade", when:"Semanas 7 a 14",
+   intro:"Meta: terminar o primeiro projeto completo, da coleta às conclusões, publicado no GitHub.",
+   groups:[
+    {name:"pandas e visualização", items:["DataFrames: leitura, seleção, filtros e ordenação","Limpeza: nulos, duplicados, tipos errados, datas","groupby, merge e pivot_table","Gráficos com matplotlib e seaborn","Usar Jupyter Notebook ou Google Colab","Ler dados de uma API com requests"]},
+    {name:"Estatística aplicada", items:["Média, mediana, moda e quando a média engana","Desvio padrão, quartis e outliers","Distribuição normal e amostragem","Correlação e por que não é causalidade","Noção de teste de hipótese e teste A/B"]},
+    {name:"Primeiro projeto", items:["Escolher uma pergunta concreta","Coletar dados públicos (IBGE, API do Banco Central, dados.gov.br)","Limpar e analisar em pandas, guardar o resultado no PostgreSQL","Responder a pergunta com 3 a 5 gráficos e conclusões","Publicar no GitHub com README: pergunta, dados, método, resultado"]}
+   ]},
+  {id:"f3", title:"Fase 3: Escolha do caminho", when:"Semanas 15 a 24", paths:true,
+   intro:"Escolha um caminho só. Gostou mais de coletar e automatizar? Engenharia. De investigar e concluir? Análise/BI.",
+   groups:[
+    {name:"Análise de Dados / BI", path:"A", items:["Excel avançado: tabelas dinâmicas, PROCX, fórmulas condicionais","Power BI: importar dados, Power Query, modelagem em estrela","DAX básico: medidas, CALCULATE, inteligência de tempo","Dashboard que responde perguntas de negócio","Storytelling: apresentar uma análise em 5 minutos","Projeto: dashboard em Power BI"]},
+    {name:"Engenharia de Dados", path:"B", items:["Modelagem dimensional: fatos, dimensões, star schema","Docker básico: PostgreSQL e scripts em containers","Uma cloud só: armazenamento e um data warehouse","Orquestração com Airflow","dbt: transformações em SQL versionadas e testadas","Projeto: pipeline diário de API até warehouse"]}
+   ], outro:"Fica de fora por enquanto: Spark, streaming, Kafka, machine learning."},
+  {id:"f4", title:"Portfólio e estágio na área", when:"A partir da semana 10",
+   intro:"Comece a se candidatar sem esperar terminar o guia.",
+   groups:[{name:"", items:["GitHub com 2 ou 3 projetos e READMEs bem escritos","LinkedIn com título voltado para dados","Post curto no LinkedIn sobre cada projeto","Currículo de uma página, projetos acima das disciplinas","Buscar “estágio dados”, “estágio BI”, “estágio engenharia de dados”, “data intern”","Treinar SQL de entrevista","Optativas de banco de dados e estatística; considerar TCC ou IC em dados (para faculdade)"]}]}
+];
+
+const KEY="guia-dados-v1";
+let state={done:{},path:"A",open:{}};
+try{const s=JSON.parse(localStorage.getItem(KEY));if(s)state=Object.assign(state,s);}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){}}
+
+const root=document.getElementById("phases");
+function el(tag,attrs,text){const e=document.createElement(tag);Object.assign(e,attrs||{});if(text)e.textContent=text;return e;}
+
+function render(){
+  root.innerHTML="";
+  PHASES.forEach(ph=>{
+    const d=el("details",{className:"phase"});
+    d.open=state.open[ph.id]!==undefined?state.open[ph.id]:ph.id==="f1";
+    d.addEventListener("toggle",()=>{state.open[ph.id]=d.open;save();});
+    const sm=el("summary");
+    sm.append(el("h2",{},ph.title));
+    const c=el("span",{className:"count"});c.dataset.phase=ph.id;sm.append(c);
+    d.append(sm);
+    const b=el("div",{className:"body"});
+    b.append(el("p",{},ph.when+". "+ph.intro));
+    if(ph.paths){
+      const pw=el("div",{className:"paths"});
+      [["A","Análise / BI"],["B","Engenharia"]].forEach(([k,l])=>{
+        const bt=el("button",{type:"button"},l);bt.setAttribute("aria-pressed",state.path===k);
+        bt.onclick=()=>{state.path=k;save();render();};pw.append(bt);
+      });
+      b.append(pw);
+    }
+    ph.groups.forEach((g,gi)=>{
+      if(g.path&&g.path!==state.path)return;
+      if(g.name)b.append(el("h3",{},g.name));
+      const ul=el("ul",{className:"tasks"});
+      g.items.forEach((it,ii)=>{
+        const id=ph.id+"-"+gi+"-"+ii;
+        const li=el("li"),lab=el("label"),cb=el("input",{type:"checkbox",checked:!!state.done[id]});
+        cb.onchange=()=>{if(cb.checked)state.done[id]=1;else delete state.done[id];save();update();};
+        lab.append(cb,el("span",{},it));li.append(lab);ul.append(li);
+      });
+      b.append(ul);
+    });
+    if(ph.outro)b.append(el("p",{style:"margin-top:14px"},ph.outro));
+    d.append(b);root.append(d);
+  });
+  update();
+}
+
+function activeIds(ph){const ids=[];ph.groups.forEach((g,gi)=>{if(g.path&&g.path!==state.path)return;g.items.forEach((_,ii)=>ids.push(ph.id+"-"+gi+"-"+ii));});return ids;}
+function update(){
+  let total=0,done=0;
+  PHASES.forEach(ph=>{
+    const ids=activeIds(ph),n=ids.filter(i=>state.done[i]).length;
+    total+=ids.length;done+=n;
+    const c=document.querySelector('[data-phase="'+ph.id+'"]');if(c)c.textContent=n+" de "+ids.length;
+  });
+  const pct=total?Math.round(done/total*100):0;
+  document.getElementById("bar").style.width=pct+"%";
+  document.querySelector(".meter").setAttribute("aria-valuenow",pct);
+  document.getElementById("barLabel").textContent=pct+"% concluído ("+done+" de "+total+" tarefas)";
+}
+
+document.getElementById("resetBtn").onclick=()=>{
+  if(confirm("Apagar todo o progresso marcado?")){state={done:{},path:state.path,open:{},routine:state.routine};save();render();}
+};
+document.getElementById("exportBtn").onclick=async()=>{
+  const btn=document.getElementById("exportBtn");
+  const data=JSON.stringify({v:1,done:state.done,path:state.path,routine:state.routine});
+  try{await navigator.clipboard.writeText(data);btn.textContent="Backup copiado";}
+  catch(e){prompt("Copie o texto abaixo e guarde onde quiser:",data);return;}
+  setTimeout(()=>{btn.textContent="Copiar backup";},2000);
+};
+document.getElementById("importBtn").onclick=()=>{
+  const t=prompt("Cole aqui o backup copiado antes. Isso substitui o progresso e a rotina atuais:");
+  if(!t)return;
+  try{
+    const d=JSON.parse(t);
+    if(!d||typeof d.done!=="object"||d.done===null)throw new Error("backup inválido");
+    state.done=d.done;
+    state.path=d.path==="B"?"B":"A";
+    if(Array.isArray(d.routine)&&d.routine.every(Array.isArray))
+      state.routine=d.routine.map(r=>[0,1,2,3].map(i=>String(r[i]==null?"":r[i])));
+    save();renderRoutine();render();
+  }catch(e){alert("Esse texto não parece um backup válido.");}
+};
+const DEFAULT_ROUTINE=[
+  ["Com aula à noite","15h00–16h30","Conteúdo novo + exercícios","1h30"],
+  ["Com aula à noite","16h30–17h30","Trabalhos da faculdade","—"],
+  ["Sem aula","15h00–17h00","Conteúdo novo + exercícios","2h"],
+  ["Sem aula","17h00–19h00","Trabalhos e provas da faculdade","—"],
+  ["Sexta","15h00–16h00","Revisão: refazer o que travou","1h"],
+  ["Sábado","Manhã","Projeto","3h"],
+  ["Domingo","—","Descanso","—"]
+];
+if(!Array.isArray(state.routine))state.routine=DEFAULT_ROUTINE.map(r=>r.slice());
+const COLS=["Dia","Horário","Foco","Dados"];
+function renderRoutine(){
+  const tb=document.getElementById("routineBody");tb.innerHTML="";
+  state.routine.forEach((row,ri)=>{
+    const tr=el("tr");
+    COLS.forEach((c,ci)=>{
+      const td=el("td"),inp=el("input",{type:"text",value:row[ci]||""});
+      inp.setAttribute("aria-label",c+", linha "+(ri+1));
+      inp.addEventListener("input",()=>{state.routine[ri][ci]=inp.value;save();});
+      td.append(inp);tr.append(td);
+    });
+    const td=el("td"),del=el("button",{type:"button",className:"del"},"×");
+    del.setAttribute("aria-label","Remover linha "+(ri+1));
+    del.onclick=()=>{state.routine.splice(ri,1);save();renderRoutine();};
+    td.append(del);tr.append(td);tb.append(tr);
+  });
+}
+document.getElementById("addRow").onclick=()=>{state.routine.push(["","","",""]);save();renderRoutine();
+  const ins=document.querySelectorAll("#routineBody tr:last-child input");if(ins[0])ins[0].focus();};
+document.getElementById("resetRoutine").onclick=()=>{
+  if(confirm("Restaurar a rotina padrão? Suas edições serão perdidas.")){state.routine=DEFAULT_ROUTINE.map(r=>r.slice());save();renderRoutine();}
+};
+renderRoutine();
+render();
+</script>
+</body>
+</html>
