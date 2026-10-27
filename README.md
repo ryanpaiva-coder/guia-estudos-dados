@@ -2,7 +2,7 @@
 
 Página estática com um plano de estudos para quem quer conseguir um estágio ou vaga júnior em dados em cerca de 6 meses. O conteúdo vai de Excel, SQL e Python até projetos de portfólio, com checklist de progresso e rotina semanal editável.
 
-🔗 **Site:** 
+🔗 **Site:** https://ryanpaiva-coder.github.io/guia-estudos-dados/
 
 ## Funcionalidades
 
